@@ -1,0 +1,15 @@
+[package]
+name = "shellshock-trainer"
+version = "0.1.0"
+authors = ["mschorsch <matthias.schorsch@gmx.de>"]
+
+# [target.'cfg(unix)'.dependencies] 
+
+[target.'cfg(windows)'.dependencies]
+winapi = "0.2.7"
+user32-sys = "0.2.0"
+
+[profile.release]
+opt-level = 3
+lto = true
+panic = 'abort'
