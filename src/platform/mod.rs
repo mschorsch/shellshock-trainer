@@ -17,6 +17,7 @@ pub enum VK {
     Key2, // set target
     Key3, // show results
     Key4, // clear
+    Key5, // switch calculation mode
 }
 
 #[derive(Debug)]

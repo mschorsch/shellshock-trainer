@@ -14,6 +14,7 @@ My main interest is not the game itself. The goal of this project was to improve
     * Key 2 (save current mouse position as position 2)
     * Key 3 (calculate different angle/speed combinations to hit the target (position 2))
     * Key 4 (clear positions)
+    * Key 5 (switch calculation mode)
 
 Example:
 1. Move the mouse over your tank and press '1'.
@@ -45,11 +46,14 @@ Button "Clone or download" -> "Download ZIP"
 ```
 cargo build --release
 ```
+
 3. Run
 ```
 cargo run --release
 ```
+
 or
+
 ```
 cd target\release
 shellshock-trainer.exe

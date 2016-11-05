@@ -34,6 +34,7 @@ impl Handle for WinHandle {
             VK::Key2 => 0x32,
             VK::Key3 => 0x33,
             VK::Key4 => 0x34,
+            VK::Key5 => 0x35,
         };
 
         let state = unsafe { user32::GetAsyncKeyState(key_code) };
