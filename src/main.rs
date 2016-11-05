@@ -9,8 +9,9 @@ use platform::{Handle, VK};
 
 use std::thread;
 use std::time;
+use std::collections::BTreeMap;
 
-const SHOW_MAX_HITS: usize = 10;
+const SHOW_MAX_HITS: usize = 5;
 
 #[derive(Debug,PartialEq,PartialOrd)]
 enum Mode {
@@ -105,7 +106,7 @@ fn start_event_loop<H: Handle>(handle: H) {
             vk4_state = false
         }
 
-        // Switch calculation mode
+        // Switch calculation mode123
         if vk5_key_down && !vk5_state {
             vk5_state = true;
 
@@ -123,30 +124,38 @@ fn start_event_loop<H: Handle>(handle: H) {
 }
 
 fn print_hits(hits: Vec<math::Hit>) {
-    println!("");
-    println!("------- RESULTS -------");
-    for (i, hit) in hits.iter().take(SHOW_MAX_HITS).enumerate() {
-        println!("{}. ({},{})", i + 1, hit.get_velocity(), hit.get_angle());
+    println!("[INFO] Results:");
+
+    println!("Best -> {}",
+             format_hits(&hits.iter().map(|hit| hit).collect::<Vec<_>>()));
+
+    let categories = into_angle_categories(&hits);
+    for (category, category_hits) in &categories {
+        println!("{} -> {}", category, format_hits(&category_hits));
     }
-    println!("-----------------------");
-    println!("");
 }
 
-// fn into_angle_categories(hits: &Vec<math::Hit>) -> BTreeMap<i32, Vec<u32>> {
-//     let mut map: BTreeMap<i32, Vec<u32>> = BTreeMap::new();
+fn format_hits(hits: &[&math::Hit]) -> String {
+    hits.iter()
+        .take(SHOW_MAX_HITS)
+        .map(|hit| format!("{}", hit))
+        .collect::<Vec<_>>()
+        .join(" ")
+}
 
-//     for hit in hits {
-//         let angle: i32 = hit.get_angle();
-//         let velocity: u32 = hit.get_velocity();
+fn into_angle_categories(hits: &Vec<math::Hit>) -> BTreeMap<i32, Vec<&math::Hit>> {
+    let mut map: BTreeMap<i32, Vec<&math::Hit>> = BTreeMap::new();
 
-//         if map.contains_key(&angle) {
-//             map.get_mut(&angle).unwrap().push(velocity);
-//         } else {
-//             let mut new_vec = Vec::new();
-//             new_vec.push(velocity);
-//             map.insert(angle, new_vec);
-//         }
-//     }
+    for hit in hits {
+        let angle = hit.get_angle();
+        let categorie = (angle / 10) * 10;
 
-//     map
-// }
+        if map.contains_key(&categorie) {
+            map.get_mut(&categorie).unwrap().push(hit);
+        } else {
+            map.insert(categorie, vec![hit]);
+        }
+    }
+
+    map
+}

@@ -6,6 +6,7 @@
 use ::platform::{Rect, Cursor};
 
 use std::cmp::Ordering;
+use std::fmt;
 
 const BASE_WINDOW_RESOLUTION: (u32, u32) = (1768, 992);
 const BASE_METER_2_PIXEL: f64 = 2.271f64; // m -> px; magic constant; found manually
@@ -25,12 +26,19 @@ impl Hit {
         }
     }
 
+    #[allow(dead_code)]
     pub fn get_velocity(&self) -> u32 {
         self.velocity
     }
 
     pub fn get_angle(&self) -> i32 {
         self.angle
+    }
+}
+
+impl fmt::Display for Hit {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({},{})", self.velocity, self.angle)
     }
 }
 
@@ -84,7 +92,7 @@ pub fn calc_launch_angles(x: f64, y: f64) -> Vec<Hit> {
 }
 
 fn calc_launch_angle(v: u32, x: f64, y: f64) -> Option<f64> {
-    let v = v as f64;    
+    let v = v as f64;
     let x = x / BASE_METER_2_PIXEL;
     let y = y / BASE_METER_2_PIXEL;
 
